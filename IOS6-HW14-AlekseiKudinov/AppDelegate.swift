@@ -15,10 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions  launchOptions:  [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         if #available(iOS 15, *) {
-              let navigationBarAppearance = UINavigationBarAppearance()
-              navigationBarAppearance.configureWithDefaultBackground()
-              UINavigationBar.appearance().standardAppearance = navigationBarAppearance
-              UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
 
               let tabBarAppearance = UITabBarAppearance()
               tabBarAppearance.configureWithDefaultBackground()
@@ -29,17 +25,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = UITabBarController()
 
         let firstViewControler = UIViewController()
+        firstViewControler.view.backgroundColor = .white
         firstViewControler.tabBarItem = UITabBarItem(title: "Медиатека", image: UIImage(systemName: "photo.fill.on.rectangle.fill"), tag: 0)
         let secondViewControler = UIViewController()
+        secondViewControler.view.backgroundColor = .white
         secondViewControler.tabBarItem = UITabBarItem(title: "Для Вас", image: UIImage(systemName: "heart.text.square.fill"), tag: 1)
-        let thirdViewControler = UINavigationController()
+        let thirdViewControler = AlbumsViewController()
+        let thirdNavigationController = UINavigationController(rootViewController: thirdViewControler)
         thirdViewControler.tabBarItem = UITabBarItem(title: "Альбомы", image: UIImage(systemName: "rectangle.stack.fill"), tag: 2)
         let fourthViewControler = UIViewController()
+        fourthViewControler.view.backgroundColor = .white
         fourthViewControler.tabBarItem = UITabBarItem(title: "Поиск", image: UIImage(systemName: "magnifyingglass"), tag: 3)
         tabBarController.setViewControllers([
             firstViewControler,
             secondViewControler,
-            thirdViewControler,
+            thirdNavigationController,
             fourthViewControler
         ], animated: true)
 
