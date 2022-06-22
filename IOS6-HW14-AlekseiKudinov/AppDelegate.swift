@@ -16,11 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if #available(iOS 15, *) {
 
-              let tabBarAppearance = UITabBarAppearance()
-              tabBarAppearance.configureWithDefaultBackground()
-              UITabBar.appearance().standardAppearance = tabBarAppearance
-              UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-            }
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithTransparentBackground()
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        }
 
         let tabBarController = UITabBarController()
 
@@ -43,9 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             fourthViewControler
         ], animated: true)
 
-
+        window = UIWindow()
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
+        tabBarController.selectedIndex = 2
 
         return true
     }
