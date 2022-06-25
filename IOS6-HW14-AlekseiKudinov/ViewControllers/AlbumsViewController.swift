@@ -38,25 +38,6 @@ class AlbumsViewController: UIViewController {
                                 withReuseIdentifier: HeaderCollectionReusableView.identifier)
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryViewOfKind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: HeaderCollectionReusableView.identifier,
-            for: indexPath) as? HeaderCollectionReusableView else {
-            return HeaderCollectionReusableView()
-        }
-        header.configure()
-        header.label.text = "Мои альбомы"
-        header.button.text = "Все"
-
-        return header
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectioniewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.size.width,
-                      height: 50)
-    }
-
     func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, AlbumItemModel>(collectionView: albumsCollectionView ?? UICollectionView()) {
             (collectionView: UICollectionView, indexPath: IndexPath, albumItem: AlbumItemModel) -> UICollectionViewCell? in
@@ -69,6 +50,23 @@ class AlbumsViewController: UIViewController {
             cell.subTitle = albumItem.imageCountLabel
             return cell
         }
+
+        dataSource?.supplementaryViewProvider = { (
+          collectionView: UICollectionView,
+          kind: String,
+          indexPath: IndexPath) -> UICollectionReusableView? in
+
+          guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: HeaderCollectionReusableView.identifier,
+            for: indexPath) as? HeaderCollectionReusableView else { fatalError("Хедер не создан") }
+            supplementaryView.configure()
+            supplementaryView.label.text = "Мои альбомы"
+            supplementaryView.button.text = "Все"
+
+          return supplementaryView
+        }
+
 
         let snapshot = snapshotForCurrentState()
         dataSource?.apply(snapshot, animatingDifferences: false)
@@ -109,11 +107,7 @@ class AlbumsViewController: UIViewController {
                           imageCountLabel: "98"),
             AlbumItemModel(photo: UIImageView(image: UIImage(named: "eighth")),
                           titleLabel: "Dubai",
-                          imageCountLabel: "236"),
-            //            AlbumItemModel(UIImage(named: "nineth")!),
-            //            AlbumItemModel(UIImage(named: "tenth")!),
-            //            AlbumItemModel(UIImage(named: "eleventh")!),
-            //            AlbumItemModel(UIImage(named: "twelfth")!)
+                          imageCountLabel: "236")
         ]
     }
 
@@ -150,6 +144,17 @@ class AlbumsViewController: UIViewController {
 
         let section = NSCollectionLayoutSection(group: rootGroup)
         section.orthogonalScrollingBehavior = .continuous
+
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(45))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top)
+
+        section.boundarySupplementaryItems = [header]
+
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         return layout

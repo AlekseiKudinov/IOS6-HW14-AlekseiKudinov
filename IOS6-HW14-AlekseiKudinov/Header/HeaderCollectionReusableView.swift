@@ -13,7 +13,7 @@ class HeaderCollectionReusableView: UICollectionReusableView {
 
     lazy var separators: UIView = {
         let separator = UIView()
-        separator.backgroundColor = .systemGray
+        separator.backgroundColor = .separator
         return separator
     }()
 
@@ -47,13 +47,13 @@ extension HeaderCollectionReusableView {
         button.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: trailingAnchor),
             label.topAnchor.constraint(equalTo: topAnchor),
             label.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             separators.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            separators.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            separators.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             separators.bottomAnchor.constraint(equalTo: label.topAnchor),
             separators.heightAnchor.constraint(equalToConstant: 1),
 
