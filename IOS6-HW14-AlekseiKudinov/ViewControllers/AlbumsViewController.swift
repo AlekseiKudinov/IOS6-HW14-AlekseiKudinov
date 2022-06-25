@@ -13,8 +13,8 @@ class AlbumsViewController: UIViewController {
         case albumBody
     }
 
-    var albumsCollectionView: UICollectionView! = nil
-    var dataSource: UICollectionViewDiffableDataSource<Section, AlbumItemModel>! = nil
+    var albumsCollectionView: UICollectionView? = nil
+    var dataSource: UICollectionViewDiffableDataSource<Section, AlbumItemModel>? = nil
 
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -33,11 +33,13 @@ class AlbumsViewController: UIViewController {
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.register(AlbumItemCell.self, forCellWithReuseIdentifier: AlbumItemCell.reuseIdentifer)
         albumsCollectionView = collectionView
+        collectionView.register(HeaderCollectionReusableView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: HeaderCollectionReusableView.identifier)
     }
 
     func configureDataSource() {
-
-        dataSource = UICollectionViewDiffableDataSource<Section, AlbumItemModel>(collectionView: albumsCollectionView) {
+        dataSource = UICollectionViewDiffableDataSource<Section, AlbumItemModel>(collectionView: albumsCollectionView ?? UICollectionView()) {
             (collectionView: UICollectionView, indexPath: IndexPath, albumItem: AlbumItemModel) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: AlbumItemCell.reuseIdentifer,
@@ -49,8 +51,25 @@ class AlbumsViewController: UIViewController {
             return cell
         }
 
+        dataSource?.supplementaryViewProvider = { (
+          collectionView: UICollectionView,
+          kind: String,
+          indexPath: IndexPath) -> UICollectionReusableView? in
+
+          guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: HeaderCollectionReusableView.identifier,
+            for: indexPath) as? HeaderCollectionReusableView else { fatalError("Хедер не создан") }
+            supplementaryView.configure()
+            supplementaryView.label.text = "Мои альбомы"
+            supplementaryView.button.text = "Все"
+
+          return supplementaryView
+        }
+
+
         let snapshot = snapshotForCurrentState()
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<Section, AlbumItemModel> {
@@ -88,11 +107,7 @@ class AlbumsViewController: UIViewController {
                           imageCountLabel: "98"),
             AlbumItemModel(photo: UIImageView(image: UIImage(named: "eighth")),
                           titleLabel: "Dubai",
-                          imageCountLabel: "236"),
-            //            AlbumItemModel(UIImage(named: "nineth")!),
-            //            AlbumItemModel(UIImage(named: "tenth")!),
-            //            AlbumItemModel(UIImage(named: "eleventh")!),
-            //            AlbumItemModel(UIImage(named: "twelfth")!)
+                          imageCountLabel: "236")
         ]
     }
 
@@ -129,7 +144,19 @@ class AlbumsViewController: UIViewController {
 
         let section = NSCollectionLayoutSection(group: rootGroup)
         section.orthogonalScrollingBehavior = .continuous
+
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(45))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top)
+
+        section.boundarySupplementaryItems = [header]
+
         let layout = UICollectionViewCompositionalLayout(section: section)
+        
         return layout
     }
 }
