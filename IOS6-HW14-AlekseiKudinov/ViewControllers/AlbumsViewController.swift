@@ -13,8 +13,8 @@ class AlbumsViewController: UIViewController {
         case albumBody
     }
 
-    var albumsCollectionView: UICollectionView! = nil
-    var dataSource: UICollectionViewDiffableDataSource<Section, AlbumItemModel>! = nil
+    var albumsCollectionView: UICollectionView? = nil
+    var dataSource: UICollectionViewDiffableDataSource<Section, AlbumItemModel>? = nil
 
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -33,11 +33,32 @@ class AlbumsViewController: UIViewController {
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.register(AlbumItemCell.self, forCellWithReuseIdentifier: AlbumItemCell.reuseIdentifer)
         albumsCollectionView = collectionView
+        collectionView.register(HeaderCollectionReusableView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: HeaderCollectionReusableView.identifier)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryViewOfKind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: HeaderCollectionReusableView.identifier,
+            for: indexPath) as? HeaderCollectionReusableView else {
+            return HeaderCollectionReusableView()
+        }
+        header.configure()
+        header.label.text = "Мои альбомы"
+        header.button.text = "Все"
+
+        return header
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectioniewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width,
+                      height: 50)
     }
 
     func configureDataSource() {
-
-        dataSource = UICollectionViewDiffableDataSource<Section, AlbumItemModel>(collectionView: albumsCollectionView) {
+        dataSource = UICollectionViewDiffableDataSource<Section, AlbumItemModel>(collectionView: albumsCollectionView ?? UICollectionView()) {
             (collectionView: UICollectionView, indexPath: IndexPath, albumItem: AlbumItemModel) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: AlbumItemCell.reuseIdentifer,
@@ -50,7 +71,7 @@ class AlbumsViewController: UIViewController {
         }
 
         let snapshot = snapshotForCurrentState()
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<Section, AlbumItemModel> {
@@ -130,6 +151,7 @@ class AlbumsViewController: UIViewController {
         let section = NSCollectionLayoutSection(group: rootGroup)
         section.orthogonalScrollingBehavior = .continuous
         let layout = UICollectionViewCompositionalLayout(section: section)
+        
         return layout
     }
 }
