@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 15, *) {
 
             let tabBarAppearance = UITabBarAppearance()
-            tabBarAppearance.configureWithTransparentBackground()
+            tabBarAppearance.configureWithDefaultBackground()
             UITabBar.appearance().standardAppearance = tabBarAppearance
             UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         }
