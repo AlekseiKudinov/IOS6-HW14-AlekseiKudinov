@@ -9,8 +9,9 @@ import UIKit
 
 class AlbumsViewController: UIViewController {
 
-    enum Section {
-        case albumBody
+    enum Section: CaseIterable {
+        case firstSection
+        case secondSection
     }
 
     var albumsCollectionView: UICollectionView? = nil
@@ -26,6 +27,9 @@ class AlbumsViewController: UIViewController {
         configurateCollectionView()
         configureDataSource()
     }
+}
+
+extension AlbumsViewController {
 
     func configurateCollectionView() {
         let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: generateLayout())
@@ -61,9 +65,17 @@ class AlbumsViewController: UIViewController {
             withReuseIdentifier: HeaderCollectionReusableView.identifier,
             for: indexPath) as? HeaderCollectionReusableView else { fatalError("Хедер не создан") }
             supplementaryView.configure()
-            supplementaryView.label.text = "Мои альбомы"
-            supplementaryView.button.text = "Все"
 
+            switch indexPath.section  {
+            case 0:
+                supplementaryView.label.text = "Мои альбомы"
+                supplementaryView.button.text = "Все"
+            case 1:
+                supplementaryView.label.text = "Люди и места"
+                supplementaryView.button.text = "Все"
+            default:
+                break
+            }
           return supplementaryView
         }
 
@@ -74,10 +86,15 @@ class AlbumsViewController: UIViewController {
 
     func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<Section, AlbumItemModel> {
         var snapshot = NSDiffableDataSourceSnapshot<Section,AlbumItemModel>()
-        snapshot.appendSections([Section.albumBody])
 
-        let items = itemsForAlbums()
-        snapshot.appendItems(items)
+        let itemsForFirstSection = Array(itemsForAlbums().prefix(8))
+        let itemsForSecondSection = Array(itemsForAlbums().suffix(4))
+
+        snapshot.appendSections([Section.firstSection])
+        snapshot.appendItems(itemsForFirstSection)
+
+        snapshot.appendSections([Section.secondSection])
+        snapshot.appendItems(itemsForSecondSection)
 
         return snapshot
     }
@@ -107,7 +124,19 @@ class AlbumsViewController: UIViewController {
                           imageCountLabel: "98"),
             AlbumItemModel(photo: UIImageView(image: UIImage(named: "eighth")),
                           titleLabel: "Dubai",
-                          imageCountLabel: "236")
+                          imageCountLabel: "236"),
+            AlbumItemModel(photo: UIImageView(image: UIImage(named: "nineth")),
+                           titleLabel: "Safari",
+                           imageCountLabel: "38"),
+            AlbumItemModel(photo: UIImageView(image: UIImage(named: "tenth")),
+                           titleLabel: "Me, My self and I",
+                           imageCountLabel: "23"),
+            AlbumItemModel(photo: UIImageView(image: UIImage(named: "eleventh")),
+                           titleLabel: "Hotel",
+                           imageCountLabel: "14"),
+            AlbumItemModel(photo: UIImageView(image: UIImage(named: "twelfth")),
+                           titleLabel: "Lifestyle",
+                           imageCountLabel: "152")
         ]
     }
 
@@ -118,26 +147,89 @@ class AlbumsViewController: UIViewController {
     //MARK: - Settings
 
     func generateLayout() -> UICollectionViewLayout {
+      let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int,
+        layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection in
 
+        let sectionLayoutKind = Section.allCases[sectionIndex]
+        switch (sectionLayoutKind) {
+        case .firstSection: return self.generateFirstSectionLayout()
+        case .secondSection: return self.generateSecondSectionLayout()
+        }
+      }
+      return layout
+    }
+
+    func generateFirstSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
-        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        fullPhotoItem.contentInsets = NSDirectionalEdgeInsets(
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(
             top: 4,
             leading: 4,
             bottom: 4,
             trailing: 4)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
+            widthDimension: .fractionalWidth(0.9/2),
             heightDimension: .fractionalHeight(1.0))
+
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
-            subitem: fullPhotoItem,
-            count: 2
-        )
-        group.interItemSpacing = .fixed(40.0)
+            subitem: item,
+            count: 2)
+
+        group.interItemSpacing = .fixed(45.0)
+
+        let rootGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(450))
+        let rootGroup = NSCollectionLayoutGroup.horizontal(layoutSize: rootGroupSize, subitem: group, count: 2)
+
+        let section = NSCollectionLayoutSection(group: rootGroup)
+        section.interGroupSpacing = .zero
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: .zero,
+            leading: .zero,
+            bottom: 70,
+            trailing: .zero)
+        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(45))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top)
+
+        section.boundarySupplementaryItems = [header]
+
+
+//        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return section
+    }
+
+    func generateSecondSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0))
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(
+            top: 4,
+            leading: 4,
+            bottom: 4,
+            trailing: 4)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.9/2),
+            heightDimension: .fractionalHeight(0.9/2))
+
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitem: item,
+            count: 1)
 
         let rootGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(450))
         let rootGroup = NSCollectionLayoutGroup.horizontal(layoutSize: rootGroupSize, subitem: group, count: 2)
@@ -155,10 +247,9 @@ class AlbumsViewController: UIViewController {
 
         section.boundarySupplementaryItems = [header]
 
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
+        return section
     }
+
 }
 
 
