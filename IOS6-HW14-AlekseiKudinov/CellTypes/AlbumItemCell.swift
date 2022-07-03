@@ -13,16 +13,6 @@ class AlbumItemCell: UICollectionViewCell {
     var photo = UIImageView()
     let titleLabel = UILabel()
     let imageCountLabel = UILabel()
-    var title: String? {
-      didSet {
-        configure()
-      }
-    }
-    var subTitle: String? {
-      didSet {
-        configure()
-      }
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,13 +32,13 @@ extension AlbumItemCell {
         photo.layer.masksToBounds = true
         photo.layer.cornerRadius = 6
         contentView.addSubview(photo)
+
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = title
         titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         titleLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(titleLabel)
+        
         imageCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        imageCountLabel.text = subTitle
         imageCountLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         imageCountLabel.adjustsFontForContentSizeCategory = true
         imageCountLabel.textColor = .placeholderText
