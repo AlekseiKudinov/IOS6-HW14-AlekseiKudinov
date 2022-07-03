@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B08513AA286D11A9004A43A1 /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08513A9286D11A9004A43A1 /* ListItemCell.swift */; };
 		B0C19ABA2854C2B8001EB65D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C19AB92854C2B8001EB65D /* AppDelegate.swift */; };
 		B0C19ABE2854C2B8001EB65D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C19ABD2854C2B8001EB65D /* ViewController.swift */; };
 		B0C19AC12854C2B8001EB65D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0C19ABF2854C2B8001EB65D /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B08513A9286D11A9004A43A1 /* ListItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		B0C19AB62854C2B8001EB65D /* IOS6-HW14-AlekseiKudinov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IOS6-HW14-AlekseiKudinov.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0C19AB92854C2B8001EB65D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0C19ABD2854C2B8001EB65D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +45,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B08513AE2872385A004A43A1 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B0C19ABF2854C2B8001EB65D /* Main.storyboard */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		B08513AF2872386E004A43A1 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				B0C19AC42854C2B9001EB65D /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		B08513B0287238AC004A43A1 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B0C19AB92854C2B8001EB65D /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		B0C19AAD2854C2B8001EB65D = {
 			isa = PBXGroup;
 			children = (
@@ -62,16 +88,15 @@
 		B0C19AB82854C2B8001EB65D /* IOS6-HW14-AlekseiKudinov */ = {
 			isa = PBXGroup;
 			children = (
+				B08513AF2872386E004A43A1 /* Storyboard */,
+				B08513B0287238AC004A43A1 /* App */,
 				B0E2A9A32868733E002C6461 /* Data */,
 				B0E2A9A228687319002C6461 /* Config */,
 				B0E2A99F28673EAD002C6461 /* Model */,
-				B0E2A99E28673E9A002C6461 /* Cell */,
+				B0E2A99E28673E9A002C6461 /* CellTypes */,
 				B0E2A99B28671334002C6461 /* Header */,
 				B0C19ACD2854D7A6001EB65D /* ViewControllers */,
-				B0C19AB92854C2B8001EB65D /* AppDelegate.swift */,
-				B0C19ABD2854C2B8001EB65D /* ViewController.swift */,
-				B0C19ABF2854C2B8001EB65D /* Main.storyboard */,
-				B0C19AC42854C2B9001EB65D /* LaunchScreen.storyboard */,
+				B08513AE2872385A004A43A1 /* Main */,
 			);
 			path = "IOS6-HW14-AlekseiKudinov";
 			sourceTree = "<group>";
@@ -80,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				B0C19ACE2854DC77001EB65D /* AlbumsViewController.swift */,
+				B0C19ABD2854C2B8001EB65D /* ViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -92,12 +118,13 @@
 			path = Header;
 			sourceTree = "<group>";
 		};
-		B0E2A99E28673E9A002C6461 /* Cell */ = {
+		B0E2A99E28673E9A002C6461 /* CellTypes */ = {
 			isa = PBXGroup;
 			children = (
 				B0C19AD028568C15001EB65D /* AlbumItemCell.swift */,
+				B08513A9286D11A9004A43A1 /* ListItemCell.swift */,
 			);
-			path = Cell;
+			path = CellTypes;
 			sourceTree = "<group>";
 		};
 		B0E2A99F28673EAD002C6461 /* Model */ = {
@@ -196,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0E2A9A12867509F002C6461 /* HeaderCollectionReusableView.swift in Sources */,
+				B08513AA286D11A9004A43A1 /* ListItemCell.swift in Sources */,
 				B0C19AD128568C15001EB65D /* AlbumItemCell.swift in Sources */,
 				B0C19ABE2854C2B8001EB65D /* ViewController.swift in Sources */,
 				B0C19AD3285693B0001EB65D /* AlbumItemModel.swift in Sources */,
